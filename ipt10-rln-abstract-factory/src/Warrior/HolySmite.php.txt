@@ -1,0 +1,13 @@
+<?php
+
+namespace App\Warrior;
+
+use App\Contracts\Ability;
+
+class HolySmite implements Ability
+{
+    public function activate(): string
+    {
+        return "Activated Holy Smite ability!";
+    }
+}

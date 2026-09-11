@@ -1,0 +1,13 @@
+<?php
+
+namespace App\Warrior;
+
+use App\Contracts\Armor;
+
+class SacredArmor implements Armor
+{
+    public function equip(): string
+    {
+        return "Equipped blessed Sacred Armor!";
+    }
+}
