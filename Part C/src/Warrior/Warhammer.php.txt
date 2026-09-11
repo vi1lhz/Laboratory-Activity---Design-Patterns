@@ -1,0 +1,13 @@
+<?php
+
+namespace App\Warrior;
+
+use App\Contracts\Weapon;
+
+class Warhammer implements Weapon
+{
+    public function use(): string
+    {
+        return "Swung a heavy sacred Warhammer!";
+    }
+}
