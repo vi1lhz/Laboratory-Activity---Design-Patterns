@@ -1,0 +1,118 @@
+php
+
+class CallingCardPrototype
+{
+    private string $firstName;
+    private string $lastName;
+    private string $businessName;
+    private string $position;
+    private string $street;
+    private string $city;
+    private string $website;
+
+    public function __construct(
+        string $businessName = 'College of Computing Studies',
+        string $position = 'BSIT Student',
+        string $street = 'AUF CCS Building',
+        string $city = 'Angeles City',
+        string $website = 'www.auf.edu.ph'
+    ) {
+        $this-businessName = $businessName;
+        $this-position = $position;
+        $this-street = $street;
+        $this-city = $city;
+        $this-website = $website;
+    }
+
+    public function setStudentDetails(string $firstName, string $lastName) self
+    {
+        $this-firstName = $firstName;
+        $this-lastName = $lastName;
+        return $this;
+    }
+
+    public function __clone() {}
+
+    public function render() GdImage
+    {
+        $width = 1000;
+        $height = 600;
+
+        $image = imagecreatetruecolor($width, $height);
+
+        $background = imagecolorallocate($image, 245, 247, 250);
+        $white      = imagecolorallocate($image, 255, 255, 255);
+        $black      = imagecolorallocate($image, 30, 30, 30);
+        $gray       = imagecolorallocate($image, 100, 100, 100);
+        $blue       = imagecolorallocate($image, 40, 100, 200);
+
+        imagefill($image, 0, 0, $background);
+
+        imagefilledrectangle($image, 50, 50, 950, 550, $white);
+        imagefilledrectangle($image, 50, 50, 75, 550, $blue);
+
+        $name = {$this-firstName} {$this-lastName};
+        $email = strtolower({$this-lastName}.{$this-firstName}@auf.edu.ph);
+        $phone = sprintf('+1 (555) %03d-%04d', rand(100, 999), rand(1000, 9999));
+        $address = {$this-street}, {$this-city};
+
+        imagestring($image, 5, 120, 100, strtoupper($this-businessName), $blue);
+        imagestring($image, 5, 120, 170, $name, $black);
+        imagestring($image, 4, 120, 210, $this-position, $blue);
+
+        imageline($image, 120, 260, 880, 260, $gray);
+
+        imagestring($image, 4, 120, 310, 'Email ' . $email, $black);
+        imagestring($image, 4, 120, 365, 'Phone ' . $phone, $black);
+        imagestring($image, 4, 120, 420, 'Address ' . $address, $black);
+        imagestring($image, 3, 120, 485, $this-website, $gray);
+
+        return $image;
+    }
+}
+
+$students = [
+    ['first_name' = 'Felicity', 'last_name' = 'Hampton'],
+    ['first_name' = 'Hank', 'last_name' = 'Rice'],
+    ['first_name' = 'Ada', 'last_name' = 'Wilson'],
+    ['first_name' = 'Daniel', 'last_name' = 'Salgado'],
+    ['first_name' = 'Avalynn', 'last_name' = 'Crane'],
+    ['first_name' = 'Fox', 'last_name' = 'Summers'],
+    ['first_name' = 'Frankie', 'last_name' = 'Andersen'],
+    ['first_name' = 'Alistair', 'last_name' = 'Decker'],
+    ['first_name' = 'Aleena', 'last_name' = 'Phillips'],
+    ['first_name' = 'Andrew', 'last_name' = 'Marks'],
+    ['first_name' = 'Monica', 'last_name' = 'French'],
+    ['first_name' = 'Corey', 'last_name' = 'Hess'],
+    ['first_name' = 'Kaliyah', 'last_name' = 'Richard'],
+    ['first_name' = 'Ahmed', 'last_name' = 'Richardson'],
+    ['first_name' = 'Allison', 'last_name' = 'Cortes'],
+    ['first_name' = 'Banks', 'last_name' = 'McGee'],
+    ['first_name' = 'Kayleigh', 'last_name' = 'Mendoza'],
+    ['first_name' = 'Dominic', 'last_name' = 'Atkins'],
+    ['first_name' = 'Mina', 'last_name' = 'Beasley'],
+    ['first_name' = 'Stanley', 'last_name' = 'Jefferson'],
+];
+
+$outputDirectory = __DIR__ . 'cards';
+if (!is_dir($outputDirectory) && !mkdir($outputDirectory, 0755, true) && !is_dir($outputDirectory)) {
+    throw new RuntimeException(Directory '$outputDirectory' could not be created.);
+}
+
+$baseCardPrototype = new CallingCardPrototype();
+
+foreach ($students as $studentData) {
+    $card = clone $baseCardPrototype;
+    $card-setStudentDetails($studentData['first_name'], $studentData['last_name']);
+
+    $image = $card-render();
+    $filename = sprintf('%scalling-card-%s-%s.png', $outputDirectory, strtolower($studentData['first_name']), strtolower($studentData['last_name']));
+
+    if (imagepng($image, $filename)) {
+        echo Generated card for {$studentData['first_name']} {$studentData['last_name']} - {$filename}n;
+    } else {
+        echo ERROR Failed to save card for {$studentData['first_name']} {$studentData['last_name']}n;
+    }
+
+    imagedestroy($image);
+}
